@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { UserPlus, Search, Filter, Plus, Users, Building, Calendar, X } from 'lucide-react';
+import { UserPlus, Search, Filter, Plus, Users, Building, Calendar, X, Briefcase, MapPin, Clock } from 'lucide-react';
 import { DashboardCard } from '../dashboard/DashboardCard';
 
 interface JobOpening {
@@ -338,8 +338,9 @@ export function Recruitment() {
             </select>
             
             <button 
-              className="btn btn-primary"
+              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-md hover:from-blue-700 hover:to-indigo-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl text-sm flex items-center"
               onClick={() => setShowPostPositionModal(true)}
+              data-testid="button-post-position"
             >
               <Plus className="h-4 w-4 mr-2" />
               Post New Position
@@ -467,192 +468,21 @@ export function Recruitment() {
 
       {/* Post New Position Modal */}
       {showPostPositionModal && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-medium text-gray-900">Post New Position</h3>
-              <button
-                onClick={() => {
-                  setShowPostPositionModal(false);
-                  setPositionForm({
-                    title: '',
-                    department: '',
-                    location: '',
-                    type: 'Full Time',
-                    experience: '',
-                    status: 'Active',
-                    applicants: 0,
-                    postedDate: new Date().toISOString().split('T')[0]
-                  });
-                  setErrors({});
-                }}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X className="h-6 w-6" />
-              </button>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-                    Position Title <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="title"
-                    name="title"
-                    value={positionForm.title}
-                    onChange={handleInputChange}
-                    className={`mt-1 block w-full rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 ${
-                      errors.title ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                    placeholder="Enter position title"
-                  />
-                  {errors.title && <p className="mt-1 text-sm text-red-600">{errors.title}</p>}
+        <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex items-start justify-center p-2 sm:p-4">
+          <div className="relative mx-auto w-full max-w-2xl my-4 sm:my-8 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden">
+            {/* Header with gradient background */}
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-4 sm:px-6 py-3 sm:py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                  <div className="bg-white bg-opacity-20 rounded-lg p-1.5 sm:p-2">
+                    <Plus className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg sm:text-xl font-bold text-white">Post New Position</h3>
+                    <p className="text-blue-100 text-xs sm:text-sm hidden sm:block">Create and publish a new job opening</p>
+                  </div>
                 </div>
-
-                <div>
-                  <label htmlFor="department" className="block text-sm font-medium text-gray-700">
-                    Department <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    id="department"
-                    name="department"
-                    value={positionForm.department}
-                    onChange={handleInputChange}
-                    className={`mt-1 block w-full rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 ${
-                      errors.department ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                  >
-                    <option value="">Select a department</option>
-                    {departments.map(department => (
-                      <option key={department} value={department}>{department}</option>
-                    ))}
-                  </select>
-                  {errors.department && <p className="mt-1 text-sm text-red-600">{errors.department}</p>}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="location" className="block text-sm font-medium text-gray-700">
-                    Location <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="location"
-                    name="location"
-                    value={positionForm.location}
-                    onChange={handleInputChange}
-                    className={`mt-1 block w-full rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 ${
-                      errors.location ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                    placeholder="e.g., San Francisco, CA or Remote"
-                  />
-                  {errors.location && <p className="mt-1 text-sm text-red-600">{errors.location}</p>}
-                </div>
-
-                <div>
-                  <label htmlFor="type" className="block text-sm font-medium text-gray-700">
-                    Employment Type <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    id="type"
-                    name="type"
-                    value={positionForm.type}
-                    onChange={handleInputChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500"
-                  >
-                    {employmentTypes.map(type => (
-                      <option key={type} value={type}>{type}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="experience" className="block text-sm font-medium text-gray-700">
-                    Experience Required <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="experience"
-                    name="experience"
-                    value={positionForm.experience}
-                    onChange={handleInputChange}
-                    className={`mt-1 block w-full rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 ${
-                      errors.experience ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                    placeholder="e.g., 3-5 years, Entry level, 5+ years"
-                  />
-                  {errors.experience && <p className="mt-1 text-sm text-red-600">{errors.experience}</p>}
-                </div>
-
-                <div>
-                  <label htmlFor="status" className="block text-sm font-medium text-gray-700">
-                    Status <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    id="status"
-                    name="status"
-                    value={positionForm.status}
-                    onChange={handleInputChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500"
-                  >
-                    {statusOptions.map(status => (
-                      <option key={status} value={status}>{status}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="applicants" className="block text-sm font-medium text-gray-700">
-                    Initial Applicant Count
-                  </label>
-                  <input
-                    type="number"
-                    id="applicants"
-                    name="applicants"
-                    value={positionForm.applicants}
-                    onChange={handleInputChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500"
-                    min="0"
-                    placeholder="0"
-                  />
-                  <p className="mt-1 text-sm text-gray-500">Usually starts at 0 for new positions</p>
-                </div>
-
-                <div>
-                  <label htmlFor="postedDate" className="block text-sm font-medium text-gray-700">
-                    Posted Date <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="date"
-                    id="postedDate"
-                    name="postedDate"
-                    value={positionForm.postedDate}
-                    onChange={handleInputChange}
-                    className={`mt-1 block w-full rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 ${
-                      errors.postedDate ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                  />
-                  {errors.postedDate && <p className="mt-1 text-sm text-red-600">{errors.postedDate}</p>}
-                </div>
-              </div>
-
-              {errors.submit && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-                  {errors.submit}
-                </div>
-              )}
-
-              <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
                 <button
-                  type="button"
                   onClick={() => {
                     setShowPostPositionModal(false);
                     setPositionForm({
@@ -667,27 +497,244 @@ export function Recruitment() {
                     });
                     setErrors({});
                   }}
-                  className="btn btn-outline"
-                  disabled={isLoading}
+                  className="text-white hover:text-gray-200 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-1.5 transition-all duration-200"
                 >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Posting...
-                    </>
-                  ) : (
-                    'Post Position'
-                  )}
+                  <X className="h-4 w-4 sm:h-5 sm:w-5" />
                 </button>
               </div>
-            </form>
+            </div>
+
+            {/* Form content */}
+            <div className="px-4 sm:px-6 py-4 max-h-[calc(100vh-8rem)] overflow-y-auto">
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+                {/* Position Basic Info Section */}
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 border border-gray-200">
+                  <h4 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 flex items-center">
+                    <Briefcase className="h-4 w-4 mr-2 text-blue-600" />
+                    Position Details
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div className="bg-white rounded-md p-3 border border-gray-300">
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Position Title <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        name="title"
+                        value={positionForm.title}
+                        onChange={(e) => {
+                          handleInputChange(e);
+                          clearFieldError('title');
+                        }}
+                        className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-sm font-medium ${
+                          errors.title ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'
+                        }`}
+                        placeholder="Enter position title"
+                      />
+                      {errors.title && <p className="mt-1 text-xs text-red-600">{errors.title}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Department <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        name="department"
+                        value={positionForm.department}
+                        onChange={(e) => {
+                          handleInputChange(e);
+                          clearFieldError('department');
+                        }}
+                        className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white text-sm ${
+                          errors.department ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'
+                        }`}
+                      >
+                        <option value="">Select a department</option>
+                        {departments.map(department => (
+                          <option key={department} value={department}>{department}</option>
+                        ))}
+                      </select>
+                      {errors.department && <p className="mt-1 text-xs text-red-600">{errors.department}</p>}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Location and Employment Type Section */}
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 border border-gray-200">
+                  <h4 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 flex items-center">
+                    <MapPin className="h-4 w-4 mr-2 text-green-600" />
+                    Work Arrangement
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div className="bg-white rounded-md p-3 border border-gray-300">
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Location <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        name="location"
+                        value={positionForm.location}
+                        onChange={(e) => {
+                          handleInputChange(e);
+                          clearFieldError('location');
+                        }}
+                        className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-sm ${
+                          errors.location ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'
+                        }`}
+                        placeholder="e.g., San Francisco, CA or Remote"
+                      />
+                      {errors.location && <p className="mt-1 text-xs text-red-600">{errors.location}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Employment Type <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        name="type"
+                        value={positionForm.type}
+                        onChange={handleInputChange}
+                        className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white text-sm"
+                      >
+                        {employmentTypes.map(type => (
+                          <option key={type} value={type}>{type}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Requirements and Status Section */}
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 border border-gray-200">
+                  <h4 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 flex items-center">
+                    <Clock className="h-4 w-4 mr-2 text-purple-600" />
+                    Requirements & Status
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div className="bg-white rounded-md p-3 border border-gray-300">
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Experience Required <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        name="experience"
+                        value={positionForm.experience}
+                        onChange={(e) => {
+                          handleInputChange(e);
+                          clearFieldError('experience');
+                        }}
+                        className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-sm ${
+                          errors.experience ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'
+                        }`}
+                        placeholder="e.g., 3-5 years, Entry level, 5+ years"
+                      />
+                      {errors.experience && <p className="mt-1 text-xs text-red-600">{errors.experience}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Position Status <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        name="status"
+                        value={positionForm.status}
+                        onChange={handleInputChange}
+                        className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white text-sm"
+                      >
+                        {statusOptions.map(status => (
+                          <option key={status} value={status}>{status}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-3 sm:mt-4">
+                    <div className="bg-white rounded-md p-3 border border-gray-300">
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Initial Applicant Count
+                      </label>
+                      <input
+                        type="number"
+                        name="applicants"
+                        value={positionForm.applicants}
+                        onChange={handleInputChange}
+                        className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-sm"
+                        min="0"
+                        placeholder="0"
+                      />
+                      <p className="mt-1 text-xs text-gray-500">Usually starts at 0 for new positions</p>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Posted Date <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="date"
+                        name="postedDate"
+                        value={positionForm.postedDate}
+                        onChange={(e) => {
+                          handleInputChange(e);
+                          clearFieldError('postedDate');
+                        }}
+                        className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white text-sm ${
+                          errors.postedDate ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'
+                        }`}
+                      />
+                      {errors.postedDate && <p className="mt-1 text-xs text-red-600">{errors.postedDate}</p>}
+                    </div>
+                  </div>
+                </div>
+
+                {errors.submit && (
+                  <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-md">
+                    <span className="text-sm font-medium">{errors.submit}</span>
+                  </div>
+                )}
+
+                {/* Action buttons */}
+                <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowPostPositionModal(false);
+                      setPositionForm({
+                        title: '',
+                        department: '',
+                        location: '',
+                        type: 'Full Time',
+                        experience: '',
+                        status: 'Active',
+                        applicants: 0,
+                        postedDate: new Date().toISOString().split('T')[0]
+                      });
+                      setErrors({});
+                    }}
+                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 font-medium text-sm"
+                    disabled={isLoading}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-md hover:from-blue-700 hover:to-indigo-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2 inline-block"></div>
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <Plus className="h-4 w-4 mr-2 inline-block" />
+                        Post Position
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}
