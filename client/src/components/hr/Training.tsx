@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BookOpen, Users, Calendar, Award, Plus, Search, X } from 'lucide-react';
+import { BookOpen, Users, Calendar, Award, Plus, Search, X, GraduationCap, Clock, User } from 'lucide-react';
 import { DashboardCard } from '../dashboard/DashboardCard';
 
 interface TrainingProgram {
@@ -321,8 +321,9 @@ export function Training() {
             </select>
             
             <button 
-              className="btn btn-primary"
+              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-md hover:from-blue-700 hover:to-indigo-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl text-sm flex items-center"
               onClick={() => setShowCreateProgramModal(true)}
+              data-testid="button-create-program"
             >
               <Plus className="h-4 w-4 mr-2" />
               Create Program
@@ -452,179 +453,23 @@ export function Training() {
         </div>
       </DashboardCard>
 
-      {/* Create Program Modal */}
+      {/* Create Training Program Modal */}
       {showCreateProgramModal && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-medium text-gray-900">Create Training Program</h3>
-              <button
-                onClick={() => {
-                  setShowCreateProgramModal(false);
-                  setProgramForm({
-                    name: '',
-                    type: '',
-                    instructor: '',
-                    startDate: '',
-                    duration: '',
-                    participants: '',
-                    status: 'Upcoming'
-                  });
-                  setErrors({});
-                }}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X className="h-6 w-6" />
-              </button>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                    Program Name <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={programForm.name}
-                    onChange={handleInputChange}
-                    className={`mt-1 block w-full rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 ${
-                      errors.name ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                    placeholder="Enter program name"
-                  />
-                  {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
+        <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex items-start justify-center p-2 sm:p-4">
+          <div className="relative mx-auto w-full max-w-2xl my-4 sm:my-8 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden">
+            {/* Header with gradient background */}
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-4 sm:px-6 py-3 sm:py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                  <div className="bg-white bg-opacity-20 rounded-lg p-1.5 sm:p-2">
+                    <GraduationCap className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg sm:text-xl font-bold text-white">Create Training Program</h3>
+                    <p className="text-blue-100 text-xs sm:text-sm hidden sm:block">Design and launch a new learning program</p>
+                  </div>
                 </div>
-
-                <div>
-                  <label htmlFor="type" className="block text-sm font-medium text-gray-700">
-                    Program Type <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    id="type"
-                    name="type"
-                    value={programForm.type}
-                    onChange={handleInputChange}
-                    className={`mt-1 block w-full rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 ${
-                      errors.type ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                  >
-                    <option value="">Select a program type</option>
-                    {programTypes.map(type => (
-                      <option key={type} value={type}>{type}</option>
-                    ))}
-                  </select>
-                  {errors.type && <p className="mt-1 text-sm text-red-600">{errors.type}</p>}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="instructor" className="block text-sm font-medium text-gray-700">
-                    Instructor <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    id="instructor"
-                    name="instructor"
-                    value={programForm.instructor}
-                    onChange={handleInputChange}
-                    className={`mt-1 block w-full rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 ${
-                      errors.instructor ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                  >
-                    <option value="">Select an instructor</option>
-                    {instructors.map(instructor => (
-                      <option key={instructor} value={instructor}>{instructor}</option>
-                    ))}
-                  </select>
-                  {errors.instructor && <p className="mt-1 text-sm text-red-600">{errors.instructor}</p>}
-                </div>
-
-                <div>
-                  <label htmlFor="startDate" className="block text-sm font-medium text-gray-700">
-                    Start Date <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="date"
-                    id="startDate"
-                    name="startDate"
-                    value={programForm.startDate}
-                    onChange={handleInputChange}
-                    className={`mt-1 block w-full rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 ${
-                      errors.startDate ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                  />
-                  {errors.startDate && <p className="mt-1 text-sm text-red-600">{errors.startDate}</p>}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="duration" className="block text-sm font-medium text-gray-700">
-                    Duration <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="duration"
-                    name="duration"
-                    value={programForm.duration}
-                    onChange={handleInputChange}
-                    className={`mt-1 block w-full rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 ${
-                      errors.duration ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                    placeholder="e.g., 8 weeks, 3 months, 2 days"
-                  />
-                  {errors.duration && <p className="mt-1 text-sm text-red-600">{errors.duration}</p>}
-                </div>
-
-                <div>
-                  <label htmlFor="participants" className="block text-sm font-medium text-gray-700">
-                    Number of Participants <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="number"
-                    id="participants"
-                    name="participants"
-                    value={programForm.participants}
-                    onChange={handleInputChange}
-                    className={`mt-1 block w-full rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 ${
-                      errors.participants ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                    placeholder="Enter number of participants"
-                    min="1"
-                  />
-                  {errors.participants && <p className="mt-1 text-sm text-red-600">{errors.participants}</p>}
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="status" className="block text-sm font-medium text-gray-700">
-                  Status <span className="text-red-500">*</span>
-                </label>
-                <select
-                  id="status"
-                  name="status"
-                  value={programForm.status}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500"
-                >
-                  {statusOptions.map(status => (
-                    <option key={status} value={status}>{status}</option>
-                  ))}
-                </select>
-              </div>
-
-              {errors.submit && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-                  {errors.submit}
-                </div>
-              )}
-
-              <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
                 <button
-                  type="button"
                   onClick={() => {
                     setShowCreateProgramModal(false);
                     setProgramForm({
@@ -638,27 +483,233 @@ export function Training() {
                     });
                     setErrors({});
                   }}
-                  className="btn btn-outline"
-                  disabled={isLoading}
+                  className="text-white hover:text-gray-200 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-1.5 transition-all duration-200"
                 >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Creating...
-                    </>
-                  ) : (
-                    'Create Program'
-                  )}
+                  <X className="h-4 w-4 sm:h-5 sm:w-5" />
                 </button>
               </div>
-            </form>
+            </div>
+
+            {/* Form content */}
+            <div className="px-4 sm:px-6 py-4 max-h-[calc(100vh-8rem)] overflow-y-auto">
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+                {/* Program Basic Info Section */}
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 border border-gray-200">
+                  <h4 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 flex items-center">
+                    <BookOpen className="h-4 w-4 mr-2 text-blue-600" />
+                    Program Information
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div className="bg-white rounded-md p-3 border border-gray-300">
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Program Name <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={programForm.name}
+                        onChange={(e) => {
+                          handleInputChange(e);
+                          clearFieldError('name');
+                        }}
+                        className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-sm font-medium ${
+                          errors.name ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'
+                        }`}
+                        placeholder="Enter program name"
+                      />
+                      {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Program Type <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        name="type"
+                        value={programForm.type}
+                        onChange={(e) => {
+                          handleInputChange(e);
+                          clearFieldError('type');
+                        }}
+                        className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white text-sm ${
+                          errors.type ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'
+                        }`}
+                      >
+                        <option value="">Select a program type</option>
+                        {programTypes.map(type => (
+                          <option key={type} value={type}>{type}</option>
+                        ))}
+                      </select>
+                      {errors.type && <p className="mt-1 text-xs text-red-600">{errors.type}</p>}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Instructor and Scheduling Section */}
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 border border-gray-200">
+                  <h4 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 flex items-center">
+                    <User className="h-4 w-4 mr-2 text-green-600" />
+                    Instructor & Schedule
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div className="bg-white rounded-md p-3 border border-gray-300">
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Instructor <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        name="instructor"
+                        value={programForm.instructor}
+                        onChange={(e) => {
+                          handleInputChange(e);
+                          clearFieldError('instructor');
+                        }}
+                        className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white text-sm ${
+                          errors.instructor ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'
+                        }`}
+                      >
+                        <option value="">Select an instructor</option>
+                        {instructors.map(instructor => (
+                          <option key={instructor} value={instructor}>{instructor}</option>
+                        ))}
+                      </select>
+                      {errors.instructor && <p className="mt-1 text-xs text-red-600">{errors.instructor}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Start Date <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="date"
+                        name="startDate"
+                        value={programForm.startDate}
+                        onChange={(e) => {
+                          handleInputChange(e);
+                          clearFieldError('startDate');
+                        }}
+                        className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white text-sm ${
+                          errors.startDate ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'
+                        }`}
+                      />
+                      {errors.startDate && <p className="mt-1 text-xs text-red-600">{errors.startDate}</p>}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Program Details Section */}
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 border border-gray-200">
+                  <h4 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 flex items-center">
+                    <Clock className="h-4 w-4 mr-2 text-purple-600" />
+                    Program Details
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                    <div className="bg-white rounded-md p-3 border border-gray-300">
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Duration <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        name="duration"
+                        value={programForm.duration}
+                        onChange={(e) => {
+                          handleInputChange(e);
+                          clearFieldError('duration');
+                        }}
+                        className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-sm ${
+                          errors.duration ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'
+                        }`}
+                        placeholder="e.g., 8 weeks, 3 months"
+                      />
+                      {errors.duration && <p className="mt-1 text-xs text-red-600">{errors.duration}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Participants <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="number"
+                        name="participants"
+                        value={programForm.participants}
+                        onChange={(e) => {
+                          handleInputChange(e);
+                          clearFieldError('participants');
+                        }}
+                        className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white text-sm ${
+                          errors.participants ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'
+                        }`}
+                        placeholder="Number of participants"
+                        min="1"
+                      />
+                      {errors.participants && <p className="mt-1 text-xs text-red-600">{errors.participants}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Status <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        name="status"
+                        value={programForm.status}
+                        onChange={handleInputChange}
+                        className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white text-sm"
+                      >
+                        {statusOptions.map(status => (
+                          <option key={status} value={status}>{status}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {errors.submit && (
+                  <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-md">
+                    <span className="text-sm font-medium">{errors.submit}</span>
+                  </div>
+                )}
+
+                {/* Action buttons */}
+                <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowCreateProgramModal(false);
+                      setProgramForm({
+                        name: '',
+                        type: '',
+                        instructor: '',
+                        startDate: '',
+                        duration: '',
+                        participants: '',
+                        status: 'Upcoming'
+                      });
+                      setErrors({});
+                    }}
+                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 font-medium text-sm"
+                    disabled={isLoading}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-md hover:from-blue-700 hover:to-indigo-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2 inline-block"></div>
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <GraduationCap className="h-4 w-4 mr-2 inline-block" />
+                        Create Program
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}
