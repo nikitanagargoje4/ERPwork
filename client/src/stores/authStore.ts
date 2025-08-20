@@ -21,6 +21,7 @@ interface AuthState {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   checkAuth: () => Promise<void>;
+  updateUser: (updatedUser: User) => void;
 }
 
 // Mock users for demo
@@ -109,5 +110,11 @@ export const useAuthStore = create<AuthState>((set) => ({
     } finally {
       set({ isLoading: false });
     }
+  },
+
+  // Update user profile
+  updateUser: (updatedUser: User) => {
+    set({ user: updatedUser });
+    localStorage.setItem('erp_user', JSON.stringify(updatedUser));
   }
 }));
