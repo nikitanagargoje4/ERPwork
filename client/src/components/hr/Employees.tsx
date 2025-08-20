@@ -805,195 +805,245 @@ export function Employees() {
 
       {/* Edit Employee Modal */}
       {showEditEmployeeModal && editingEmployee && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-medium text-gray-900">Edit Employee</h3>
-              <button
-                onClick={() => {
-                  setShowEditEmployeeModal(false);
-                  setEditingEmployee(null);
-                  setErrors({});
-                }}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X className="h-6 w-6" />
-              </button>
-            </div>
-
-            <form onSubmit={handleEditSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="editName" className="block text-sm font-medium text-gray-700">
-                    Employee Name <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="editName"
-                    name="name"
-                    value={editForm.name}
-                    onChange={handleEditInputChange}
-                    className={`mt-1 block w-full rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 ${
-                      errors.name ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                    placeholder="Enter full name"
-                  />
-                  {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
+        <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex items-start justify-center p-2 sm:p-4">
+          <div className="relative mx-auto w-full max-w-2xl my-4 sm:my-8 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden">
+            {/* Header with gradient background */}
+            <div className="bg-gradient-to-r from-indigo-600 to-purple-700 px-4 sm:px-6 py-3 sm:py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                  <div className="bg-white bg-opacity-20 rounded-lg p-1.5 sm:p-2">
+                    <Edit className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg sm:text-xl font-bold text-white">Edit Employee</h3>
+                    <p className="text-indigo-100 text-xs sm:text-sm hidden sm:block">Update employee information and details</p>
+                  </div>
                 </div>
-
-                <div>
-                  <label htmlFor="editEmail" className="block text-sm font-medium text-gray-700">
-                    Email Address <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    id="editEmail"
-                    name="email"
-                    value={editForm.email}
-                    onChange={handleEditInputChange}
-                    className={`mt-1 block w-full rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 ${
-                      errors.email ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                    placeholder="Enter email address"
-                  />
-                  {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="editDepartment" className="block text-sm font-medium text-gray-700">
-                    Department <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    id="editDepartment"
-                    name="department"
-                    value={editForm.department}
-                    onChange={handleEditInputChange}
-                    className={`mt-1 block w-full rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 ${
-                      errors.department ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                  >
-                    <option value="">Select a department</option>
-                    {departments.map(department => (
-                      <option key={department} value={department}>{department}</option>
-                    ))}
-                  </select>
-                  {errors.department && <p className="mt-1 text-sm text-red-600">{errors.department}</p>}
-                </div>
-
-                <div>
-                  <label htmlFor="editPosition" className="block text-sm font-medium text-gray-700">
-                    Position <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="editPosition"
-                    name="position"
-                    value={editForm.position}
-                    onChange={handleEditInputChange}
-                    className={`mt-1 block w-full rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 ${
-                      errors.position ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                    placeholder="Enter position title"
-                  />
-                  {errors.position && <p className="mt-1 text-sm text-red-600">{errors.position}</p>}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="editStatus" className="block text-sm font-medium text-gray-700">
-                    Status <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    id="editStatus"
-                    name="status"
-                    value={editForm.status}
-                    onChange={handleEditInputChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500"
-                  >
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                    <option value="On Leave">On Leave</option>
-                    <option value="Terminated">Terminated</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label htmlFor="editStartDate" className="block text-sm font-medium text-gray-700">
-                    Start Date <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="date"
-                    id="editStartDate"
-                    name="startDate"
-                    value={editForm.startDate}
-                    onChange={handleEditInputChange}
-                    className={`mt-1 block w-full rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 ${
-                      errors.startDate ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                  />
-                  {errors.startDate && <p className="mt-1 text-sm text-red-600">{errors.startDate}</p>}
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="editManager" className="block text-sm font-medium text-gray-700">
-                  Manager <span className="text-red-500">*</span>
-                </label>
-                <select
-                  id="editManager"
-                  name="manager"
-                  value={editForm.manager}
-                  onChange={handleEditInputChange}
-                  className={`mt-1 block w-full rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 ${
-                    errors.manager ? 'border-red-300' : 'border-gray-300'
-                  }`}
-                >
-                  <option value="">Select a manager</option>
-                  {managers.map(manager => (
-                    <option key={manager} value={manager}>{manager}</option>
-                  ))}
-                </select>
-                {errors.manager && <p className="mt-1 text-sm text-red-600">{errors.manager}</p>}
-              </div>
-
-              {errors.submit && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-                  {errors.submit}
-                </div>
-              )}
-
-              <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
                 <button
-                  type="button"
                   onClick={() => {
                     setShowEditEmployeeModal(false);
                     setEditingEmployee(null);
                     setErrors({});
                   }}
-                  className="btn btn-outline"
-                  disabled={isLoading}
+                  className="text-white hover:text-gray-200 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-1.5 transition-all duration-200"
                 >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Updating...
-                    </>
-                  ) : (
-                    'Update Employee'
-                  )}
+                  <X className="h-4 w-4 sm:h-5 sm:w-5" />
                 </button>
               </div>
-            </form>
+            </div>
+
+            {/* Form content */}
+            <div className="px-4 sm:px-6 py-4 max-h-[calc(100vh-8rem)] overflow-y-auto">
+              <form onSubmit={handleEditSubmit} className="space-y-4 sm:space-y-5">
+                {/* Personal Information Section */}
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 border border-gray-200">
+                  <h4 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 flex items-center">
+                    <Users className="h-4 w-4 mr-2 text-indigo-600" />
+                    Personal Information
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div className="bg-white rounded-md p-3 border border-gray-300">
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Full Name <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={editForm.name}
+                        onChange={(e) => {
+                          handleEditInputChange(e);
+                          clearFieldError('name');
+                        }}
+                        className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-sm font-medium ${
+                          errors.name ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'
+                        }`}
+                        placeholder="Enter employee's full name"
+                      />
+                      {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Email Address <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={editForm.email}
+                        onChange={(e) => {
+                          handleEditInputChange(e);
+                          clearFieldError('email');
+                        }}
+                        className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 bg-white text-sm ${
+                          errors.email ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'
+                        }`}
+                        placeholder="Enter email address"
+                      />
+                      {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email}</p>}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Employment Information Section */}
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 border border-gray-200">
+                  <h4 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 flex items-center">
+                    <Briefcase className="h-4 w-4 mr-2 text-green-600" />
+                    Employment Details
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div className="bg-white rounded-md p-3 border border-gray-300">
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Department <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        name="department"
+                        value={editForm.department}
+                        onChange={(e) => {
+                          handleEditInputChange(e);
+                          clearFieldError('department');
+                        }}
+                        className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 bg-white text-sm ${
+                          errors.department ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'
+                        }`}
+                      >
+                        <option value="">Select a department</option>
+                        {departments.map(department => (
+                          <option key={department} value={department}>{department}</option>
+                        ))}
+                      </select>
+                      {errors.department && <p className="mt-1 text-xs text-red-600">{errors.department}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Position Title <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        name="position"
+                        value={editForm.position}
+                        onChange={(e) => {
+                          handleEditInputChange(e);
+                          clearFieldError('position');
+                        }}
+                        className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 bg-white text-sm ${
+                          errors.position ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'
+                        }`}
+                        placeholder="Enter job position"
+                      />
+                      {errors.position && <p className="mt-1 text-xs text-red-600">{errors.position}</p>}
+                    </div>
+                  </div>
+
+                  <div className="mt-3 sm:mt-4">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                      Reporting Manager <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      name="manager"
+                      value={editForm.manager}
+                      onChange={(e) => {
+                        handleEditInputChange(e);
+                        clearFieldError('manager');
+                      }}
+                      className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 bg-white text-sm ${
+                        errors.manager ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'
+                      }`}
+                    >
+                      <option value="">Select a manager</option>
+                      {managers.map(manager => (
+                        <option key={manager} value={manager}>{manager}</option>
+                      ))}
+                    </select>
+                    {errors.manager && <p className="mt-1 text-xs text-red-600">{errors.manager}</p>}
+                  </div>
+                </div>
+
+                {/* Status and Start Date Section */}
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4 border border-gray-200">
+                  <h4 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 flex items-center">
+                    <Calendar className="h-4 w-4 mr-2 text-purple-600" />
+                    Employment Status
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div className="bg-white rounded-md p-3 border border-gray-300">
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Employee Status <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        name="status"
+                        value={editForm.status}
+                        onChange={handleEditInputChange}
+                        className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 bg-white text-sm"
+                      >
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                        <option value="On Leave">On Leave</option>
+                        <option value="Terminated">Terminated</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                        Start Date <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="date"
+                        name="startDate"
+                        value={editForm.startDate}
+                        onChange={(e) => {
+                          handleEditInputChange(e);
+                          clearFieldError('startDate');
+                        }}
+                        className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 bg-white text-sm ${
+                          errors.startDate ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300'
+                        }`}
+                      />
+                      {errors.startDate && <p className="mt-1 text-xs text-red-600">{errors.startDate}</p>}
+                    </div>
+                  </div>
+                </div>
+
+                {errors.submit && (
+                  <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-md">
+                    <span className="text-sm font-medium">{errors.submit}</span>
+                  </div>
+                )}
+
+                {/* Action buttons */}
+                <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowEditEmployeeModal(false);
+                      setEditingEmployee(null);
+                      setErrors({});
+                    }}
+                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 font-medium text-sm"
+                    disabled={isLoading}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2 bg-gradient-to-r from-indigo-600 to-purple-700 text-white rounded-md hover:from-indigo-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2 inline-block"></div>
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <Edit className="h-4 w-4 mr-2 inline-block" />
+                        Update Employee
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}
