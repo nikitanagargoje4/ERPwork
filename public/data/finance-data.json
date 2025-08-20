@@ -1,0 +1,41 @@
+{
+  "overview": {
+    "totalRevenue": {
+      "current": 2480000,
+      "previous": 2150000,
+      "changePercent": 15.3
+    },
+    "totalExpenses": {
+      "current": 1890000,
+      "previous": 1720000,
+      "changePercent": 9.9
+    },
+    "netProfit": {
+      "current": 590000,
+      "previous": 430000,
+      "changePercent": 37.2
+    }
+  },
+  "monthlyData": [
+    { "month": "Jan", "revenue": 185000, "expenses": 142000 },
+    { "month": "Feb", "revenue": 198000, "expenses": 155000 },
+    { "month": "Mar", "revenue": 215000, "expenses": 168000 },
+    { "month": "Apr", "revenue": 205000, "expenses": 158000 },
+    { "month": "May", "revenue": 228000, "expenses": 172000 },
+    { "month": "Jun", "revenue": 242000, "expenses": 185000 },
+    { "month": "Jul", "revenue": 235000, "expenses": 178000 },
+    { "month": "Aug", "revenue": 258000, "expenses": 195000 },
+    { "month": "Sep", "revenue": 270000, "expenses": 202000 },
+    { "month": "Oct", "revenue": 285000, "expenses": 215000 },
+    { "month": "Nov", "revenue": 295000, "expenses": 225000 },
+    { "month": "Dec", "revenue": 310000, "expenses": 235000 }
+  ],
+  "departmentExpenses": [
+    { "department": "Marketing", "amount": 285000 },
+    { "department": "R&D", "amount": 420000 },
+    { "department": "HR", "amount": 195000 },
+    { "department": "IT", "amount": 335000 },
+    { "department": "Operations", "amount": 385000 },
+    { "department": "Sales", "amount": 270000 }
+  ]
+}
