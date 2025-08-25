@@ -7,18 +7,26 @@ export function ProfileSettings() {
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   
   // Initialize profile data from current user or default values
-  const [profileData, setProfileData] = useState({
-    firstName: user?.name.split(' ')[0] || 'Admin',
-    lastName: user?.name.split(' ')[1] || 'User',
-    email: user?.email || 'admin@example.com',
-    phone: '+1 (555) 123-4567',
-    title: 'System Administrator',
-    department: 'Information Technology',
-    location: 'New York, NY',
-    bio: 'Experienced system administrator with expertise in ERP systems and team leadership.',
-    role: user?.role || 'Administrator'
+  const [profileData, setProfileData] = useState(() => {
+    const stored = localStorage.getItem('erp_user_profile');
+    const storedData = stored ? JSON.parse(stored) : {};
+    return {
+      firstName: storedData.firstName || user?.name.split(' ')[0] || 'Admin',
+      lastName: storedData.lastName || user?.name.split(' ')[1] || 'User',
+      email: storedData.email || user?.email || 'admin@example.com',
+      phone: storedData.phone || '+1 (555) 123-4567',
+      title: storedData.title || 'System Administrator',
+      department: storedData.department || 'Information Technology',
+      location: storedData.location || 'New York, NY',
+      bio: storedData.bio || 'Experienced system administrator with expertise in ERP systems and team leadership.',
+      role: storedData.role || user?.role || 'Administrator',
+      profilePhoto: storedData.profilePhoto || null
+    };
   });
 
   // Store original data for cancel functionality
@@ -116,6 +124,71 @@ export function ProfileSettings() {
   // Check if form has changes
   const hasChanges = JSON.stringify(profileData) !== JSON.stringify(originalData);
 
+  // Handle file selection
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+    }
+  };
+
+  // Handle photo upload
+  const handlePhotoUpload = async () => {
+    if (!selectedFile) return;
+
+    setIsLoading(true);
+    try {
+      // Simulate file upload delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Convert file to base64 and save to profile data
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        const updatedProfileData = {
+          ...profileData,
+          profilePhoto: base64String
+        };
+        
+        // Save to localStorage (simulating JSON file storage)
+        const profileStorageKey = 'erp_user_profile';
+        localStorage.setItem(profileStorageKey, JSON.stringify(updatedProfileData));
+        
+        setProfileData(updatedProfileData);
+        setOriginalData(updatedProfileData);
+        setShowUploadModal(false);
+        setSelectedFile(null);
+        setPreviewUrl(null);
+        setSuccessMessage('Profile photo updated successfully!');
+        setTimeout(() => setSuccessMessage(''), 3000);
+      };
+      reader.readAsDataURL(selectedFile);
+    } catch (error) {
+      console.error('Error uploading photo:', error);
+      setErrors({ submit: 'Failed to upload photo. Please try again.' });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Handle photo removal
+  const handlePhotoRemove = () => {
+    const updatedProfileData = {
+      ...profileData,
+      profilePhoto: null
+    };
+    
+    const profileStorageKey = 'erp_user_profile';
+    localStorage.setItem(profileStorageKey, JSON.stringify(updatedProfileData));
+    
+    setProfileData(updatedProfileData);
+    setOriginalData(updatedProfileData);
+    setSuccessMessage('Profile photo removed successfully!');
+    setTimeout(() => setSuccessMessage(''), 3000);
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-6">
       {/* Success Message */}
@@ -149,10 +222,20 @@ export function ProfileSettings() {
           </h2>
           <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
             <div className="relative">
-              <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
-                <span className="text-xl sm:text-2xl font-bold text-white">
-                  {profileData.firstName[0]}{profileData.lastName[0]}
-                </span>
+              <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-full overflow-hidden shadow-lg">
+                {profileData.profilePhoto ? (
+                  <img
+                    src={profileData.profilePhoto}
+                    alt="Profile"
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="h-full w-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                    <span className="text-xl sm:text-2xl font-bold text-white">
+                      {profileData.firstName[0]}{profileData.lastName[0]}
+                    </span>
+                  </div>
+                )}
               </div>
               <button 
                 type="button"
@@ -170,6 +253,7 @@ export function ProfileSettings() {
               <div className="mt-3 flex flex-wrap gap-2">
                 <button 
                   type="button"
+                  onClick={() => setShowUploadModal(true)}
                   className="px-3 py-1.5 text-xs sm:text-sm font-medium text-indigo-700 bg-indigo-100 rounded-md hover:bg-indigo-200 transition-all duration-200"
                   data-testid="button-upload-photo"
                 >
@@ -177,6 +261,7 @@ export function ProfileSettings() {
                 </button>
                 <button 
                   type="button"
+                  onClick={handlePhotoRemove}
                   className="px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200 transition-all duration-200"
                   data-testid="button-remove-photo"
                 >
@@ -399,6 +484,76 @@ export function ProfileSettings() {
           </button>
         </div>
       </form>
+
+      {/* Photo Upload Modal */}
+      {showUploadModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Upload Profile Photo</h3>
+              <button
+                onClick={() => {
+                  setShowUploadModal(false);
+                  setSelectedFile(null);
+                  setPreviewUrl(null);
+                }}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              {/* File Input */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Choose Image File
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileSelect}
+                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                />
+              </div>
+              
+              {/* Preview */}
+              {previewUrl && (
+                <div className="flex justify-center">
+                  <img
+                    src={previewUrl}
+                    alt="Preview"
+                    className="h-32 w-32 rounded-full object-cover border-4 border-gray-200"
+                  />
+                </div>
+              )}
+              
+              {/* Action Buttons */}
+              <div className="flex justify-end space-x-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowUploadModal(false);
+                    setSelectedFile(null);
+                    setPreviewUrl(null);
+                  }}
+                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handlePhotoUpload}
+                  disabled={!selectedFile || isLoading}
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoading ? 'Uploading...' : 'Upload Photo'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
