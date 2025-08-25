@@ -27,6 +27,7 @@ export function Settings() {
 
   // Render the appropriate settings component based on the active tab
   const renderActiveComponent = () => {
+    console.log('Rendering component for activeTab:', activeTab);
     switch (activeTab) {
       case 'profile':
         return <ProfileSettings />;
