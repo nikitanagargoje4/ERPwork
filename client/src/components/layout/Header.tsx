@@ -191,11 +191,11 @@ export function Header({ onMenuButtonClick }: HeaderProps) {
                   Settings
                 </a>
                 <a
-                  href="#"
+                  href="/settings"
                   className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   onClick={(e) => {
                     e.preventDefault();
-                    // Documentation or help section
+                    window.location.href = '/settings';
                     setUserMenuOpen(false);
                   }}
                 >
