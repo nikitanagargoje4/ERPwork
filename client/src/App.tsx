@@ -63,6 +63,7 @@ function App() {
       <Route path="/crm/:rest*" component={CustomerRelationship} />
       <Route path="/manufacturing/:rest*" component={Manufacturing} />
       <Route path="/projects/:rest*" component={ProjectManagement} />
+      <Route path="/settings" component={Settings} />
       <Route path="/settings/:rest*" component={Settings} />
     </Layout>
   );

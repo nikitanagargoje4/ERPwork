@@ -7,11 +7,8 @@ export function GeneralSettings() {
   const [theme, setTheme] = useState('light');
   const [dateFormat, setDateFormat] = useState('MM/DD/YYYY');
 
-  console.log('GeneralSettings component rendering');
-
   return (
-    <div className="space-y-6" style={{background: 'red', padding: '20px', minHeight: '200px'}}>
-      <h1 style={{color: 'white', fontSize: '24px'}}>GENERAL SETTINGS TEST</h1>
+    <div className="space-y-6">
       <div className="bg-white shadow rounded-lg divide-y divide-gray-200">
         {/* Language and Region */}
         <div className="p-6">

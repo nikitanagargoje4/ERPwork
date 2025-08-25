@@ -10,7 +10,7 @@ import { IntegrationSettings } from '../components/settings/IntegrationSettings'
 export function Settings() {
   const [location] = useLocation();
   const activeTab = 
-    location === '/settings' ? 'general' :
+    location === '/settings' || location.startsWith('/settings/general') ? 'general' :
     location.includes('/profile') ? 'profile' :
     location.includes('/security') ? 'security' :
     location.includes('/notifications') ? 'notifications' :
@@ -27,7 +27,6 @@ export function Settings() {
 
   // Render the appropriate settings component based on the active tab
   const renderActiveComponent = () => {
-    console.log('Rendering component for activeTab:', activeTab);
     switch (activeTab) {
       case 'profile':
         return <ProfileSettings />;
